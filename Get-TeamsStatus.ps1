@@ -54,7 +54,7 @@ If($null -ne $SetStatus){
 DO {
 # Get latest MSTeams_ logfile
 $latestLogfile = Get-ChildItem -Path "C:\Users\$LocalUsername\AppData\Local\Packages\MSTeams_8wekyb3d8bbwe\LocalCache\Microsoft\MSTeams\Logs" -Name "MSTeams_*" | Select-Object -Last 1
-$MSTeamsLog = Get-Content -Path "C:\Users\$LocalUsername\AppData\Local\Packages\MSTeams_8wekyb3d8bbwe\LocalCache\Microsoft\MSTeams\Logs\$latestLogfile" -Tail 100
+$MSTeamsLog = Get-Content -Path "C:\Users\$LocalUsername\AppData\Local\Packages\MSTeams_8wekyb3d8bbwe\LocalCache\Microsoft\MSTeams\Logs\$latestLogfile" -Tail 1000
 
 # Get Teams Logfile and last icon overlay status
 $TeamsStatus = $MSTeamsLog | Select-String -Pattern `
@@ -66,7 +66,8 @@ $TeamsActivity = $MSTeamsLog | Select-String -Pattern `
   'NotifyCallActive',`
   'NotifyCallAccepted',`
   'NotifyCallEnded',`
-  'reportIncomingCall' | Select-Object -Last 1
+  'reportIncomingCall',`
+  'RequestNewOutgoingCallWithOptions' | Select-Object -Last 1
 
 # Get Teams application process
 $TeamsProcess = Get-Process -Name ms-teams -ErrorAction SilentlyContinue
@@ -115,6 +116,12 @@ If ($null -ne $TeamsProcess) {
     ElseIf ($TeamsActivity -like "*reportIncomingCall*") {
         $Activity = $lgIncomingCall
         $ActivityIcon = $iconIncomingCall
+        Write-Host $Activity
+        Write-Host $ActivityIcon
+    }
+    ElseIf ($TeamsActivity -like "*RequestNewOutgoingCallWithOptions*") {
+        $Activity = $lgOutgoingCall
+        $ActivityIcon = $iconOutgoingCall
         Write-Host $Activity
         Write-Host $ActivityIcon
     }
