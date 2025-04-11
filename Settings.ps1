@@ -17,7 +17,7 @@ $lgOffline = "Offline"
 $lgNotInACall = "Not in a call"
 $lgInACall = "In a call"
 $lgIncomingCall = "Incoming call"
-$lgOutgoingCall = "Outgoing Call"
+$lgOutgoingCall = "Outgoing call"
 
 # Set icons to use for call activity
 $iconInACall = "mdi:phone-in-talk"
